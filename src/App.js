@@ -1,19 +1,19 @@
 import './App.css';
 import { Button, Modal, Space, Table, Input } from 'antd';
 import React, { useState } from 'react';
-import { EditOutlined, DeleteOutlined, EditFilled } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 function App() {
   const [dataSource, setDataSource] = useState([
     {
       id: 1,
-      name: 'Alesya',
-      last: 'Yanushkevich'
+      name: 'Arina',
+      last: 'Voronkova'
     },
     {
       id: 2,
-      name: 'Milana',
-      last: 'Yanushkevich'
+      name: 'Bill',
+      last: 'Gates'
     }
   ]);
 
@@ -39,7 +39,7 @@ function App() {
       render: (record) => {
         return (
           <>
-            <EditFilled style={{ cursor: 'pointer' }} />
+            <EditOutlined style={{ cursor: 'pointer' }} />
             <DeleteOutlined
             onClick={()=>deleteRecord(record)}
               style={{ color: 'red', marginLeft: 12, cursor: 'pointer' }}
