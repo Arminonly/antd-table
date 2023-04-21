@@ -4,44 +4,58 @@ import React, { useState } from 'react';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 function App() {
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [isEditingRecord, setIsEditingRecord] = useState(null);
   const [dataSource, setDataSource] = useState([
     {
-      id: 1,
-      name: 'Arina',
-      last: 'Voronkova'
-    },
-    {
-      id: 2,
-      name: 'Bill',
-      last: 'Gates'
+      key: Date.now(),
+      name: 'name',
+      last: 'last',
+      age: 'age',
+      address: 'address',
+      email: 'email'
     }
   ]);
 
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: '1'
-    },
-    {
       title: 'Name',
       dataIndex: 'name',
-      key: '2'
+      key: 'name'
     },
     {
       title: 'Last',
       dataIndex: 'last',
-      key: '3'
+      key: 'last'
+    },
+    {
+      title: 'Age',
+      dataIndex: 'age',
+      key: 'age'
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address',
+      key: 'address'
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email'
     },
     {
       title: 'Actions',
-      dataIndex: 'actions',
+      // dataIndex: 'actions',
+      key: 'actions',
       render: (record) => {
         return (
           <>
-            <EditOutlined style={{ cursor: 'pointer' }} />
+            <EditOutlined
+              onClick={() => editRecord(record)}
+              style={{ cursor: 'pointer' }}
+            />
             <DeleteOutlined
-            onClick={()=>deleteRecord(record)}
+              onClick={() => deleteRecord(record)}
               style={{ color: 'red', marginLeft: 12, cursor: 'pointer' }}
             />
           </>
@@ -49,23 +63,41 @@ function App() {
       }
     }
   ];
-  const addRecord = () => {
-    const randomNumber = parseInt(Math.random()*10);
-    const newRecord = {
-      id: randomNumber,
-      name: 'Name' + randomNumber,
-      last: 'Last' + randomNumber
-    }
-    setDataSource(pre=> {
-      return [...pre, newRecord]
-    })
-  };
-  const deleteRecord = (record) => {
- setDataSource(pre=>{
-  return pre.filter((person) => person.id !== record.id);
- })
 
-  }
+  const addRecord = () => {
+    const newRecord = {
+      key: Date.now(),
+      name: 'first name',
+      last: 'last name',
+      age: 'age',
+      address: 'address',
+      email: 'email'
+    };
+    setDataSource((pre) => {
+      return [...pre, newRecord];
+    });
+    console.log(newRecord);
+  };
+
+  const deleteRecord = (record) => {
+    Modal.confirm({
+      title: 'Are you sure?',
+      okText: 'Yes',
+      onOk: () => {
+        setDataSource((pre) => {
+          return pre.filter((person) => person !== record);
+        });
+      }
+    });
+  };
+  const editRecord = (record) => {
+    setShowEditModal(true);
+    setIsEditingRecord({ ...record });
+  };
+  const resetModal = () => {
+    setShowEditModal(false);
+    setIsEditingRecord(null);
+  };
   return (
     <div className="App">
       <header className="App-header">
@@ -79,8 +111,70 @@ function App() {
           </Button>
         </Space>
         <Table dataSource={dataSource} columns={columns} />
-        <Modal>
-          <Input />
+        <Modal
+          open={showEditModal}
+          title="Edit person"
+          centered
+          okText="Save"
+          onCancel={() => resetModal()}
+          onOk={() => {
+            setDataSource((pre) => {
+              return pre.map((el) => {
+                if (el.key === isEditingRecord.key) {
+                  return isEditingRecord;
+                } else {
+                  return el;
+                }
+              });
+            });
+            resetModal();
+          }}
+        >
+          <Input
+            placeholder="name"
+            value={isEditingRecord?.name}
+            onChange={(e) =>
+              setIsEditingRecord((pre) => {
+                return { ...pre, name: e.target.value };
+              })
+            }
+          />
+          <Input
+            placeholder="last"
+            value={isEditingRecord?.last}
+            onChange={(e) =>
+              setIsEditingRecord((pre) => {
+                return { ...pre, last: e.target.value };
+              })
+            }
+          />
+          <Input
+            placeholder="age"
+            value={isEditingRecord?.age}
+            onChange={(e) =>
+              setIsEditingRecord((pre) => {
+                return { ...pre, age: e.target.value };
+              })
+            }
+          />
+          <Input
+            placeholder="address"
+            value={isEditingRecord?.address}
+            onChange={(e) =>
+              setIsEditingRecord((pre) => {
+                return { ...pre, address: e.target.value };
+              })
+            }
+          />
+          <Input
+            placeholder="email"
+            value={isEditingRecord?.email}
+            onChange={(e) =>
+              setIsEditingRecord((pre) => {
+                return { ...pre, email: e.target.value };
+              })
+            }
+          />
         </Modal>
       </header>
     </div>
@@ -88,3 +182,11 @@ function App() {
 }
 
 export default App;
+
+{
+  /*  */
+}
+
+{
+  /*; */
+}
